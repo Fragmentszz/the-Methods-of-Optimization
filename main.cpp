@@ -1,12 +1,35 @@
 #include"SearchArea.h"
-#include<iostream>
+#include"Fibonacci.h"
+
 using namespace std;
+ld func1(ld x)
+{
+	return x * x - 2 * x + 1;
+}
+ld func2(ld x)
+{
+	return expl(-x) + x * x;
+}
+ld func3(ld x)
+{
+	return x * x * x * x + 2 * x + 4;
+}
 int main()
 {
-	auto func1 = [](ld x) ->ld {return x * x - 2 * x + 1; };
-	auto func2 = [](ld x) ->ld {return expl(-x) + x * x; };
-	auto func3 = [](ld x) ->ld {return x * x * x * x + 2 * x + 4; };
-	ANS res = SearchArea(func3, 0, 0.1);
+	AREA res = SearchArea(func1, 0, 0.1); 
 	cout << res[0] << " " << res[1] << " " << res[2] << endl;
+	std::vector<ld> left = { -1.0L }, right = { 0.0L };
+	auto Func1 = [](const ANS& x) ->ld {
+		if (x.dim != 1)
+		{
+			printf("输入向量长度不为1!\n");
+			return 0;
+		}
+		return func3(x.ans[0]);
+		};
+	ANS a(1,left), b(1,right);
+	FibonacciSearch fs(1);
+	fs.init(a, b, Func1, 0.0001);
+	fs.search();
 	return 0;
 }

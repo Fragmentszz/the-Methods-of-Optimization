@@ -1,5 +1,5 @@
 #include"SearchArea.h"
-ANS SearchArea(FUNC f, ld _x0, ld _deltax0)
+AREA SearchArea(FUNC f, ld _x0, ld _deltax0)
 {
 	ld x0 = _x0, x1 = _x0 + _deltax0, x2 = 0, deltax = _deltax0;
 	ld fx0 = f(x0), fx1 = f(x1), fx2 = 0;
