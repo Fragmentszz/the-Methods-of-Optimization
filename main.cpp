@@ -1,5 +1,5 @@
 #include"SearchArea.h"
-#include"Fibonacci.h"
+#include"Gold.h"
 
 using namespace std;
 ld func1(ld x)
@@ -28,8 +28,8 @@ int main()
 		return func3(x.ans[0]);
 		};
 	ANS a(1,left), b(1,right);
-	FibonacciSearch fs(1);
-	fs.init(a, b, Func1, 0.0001);
-	fs.search();
+	GoldSearch gs(1);
+	gs.init(a, b, Func1, 0.0001);
+	gs.search();
 	return 0;
 }
