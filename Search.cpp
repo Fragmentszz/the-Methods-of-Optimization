@@ -30,7 +30,7 @@ ANS& ANS::operator=(const std::vector<ld>& _ans)
 }
 ANS::ANS(std::vector<ld>& _ans):ANS(_ans.size(),_ans)
 {}
-ANS::ANS(ANS& _ans)
+ANS::ANS(const ANS& _ans)
 {
 	ans.clear();
 	dim = _ans.dim;
@@ -71,6 +71,94 @@ ANS ANS::operator-(const ANS& b)
 	}
 	return tmp;
 }
+
+bool ANS::operator<(const ANS& b)
+{
+	if (dim != b.dim) {
+		printf("不同长度的向量不能比较大小\n");
+		return 0;
+	}
+	for (int i = 0; i < dim; i++)
+	{
+		if (ans[i] >= b.ans[i]) {
+			return 0;
+		}
+	}
+	return 1;
+}
+
+bool ANS::operator>(const ANS& b)
+{
+	if (dim != b.dim) {
+		printf("不同长度的向量不能比较大小\n");
+		return 0;
+	}
+	for (int i = 0; i < dim; i++)
+	{
+		if (ans[i] <= b.ans[i]) {
+			return 0;
+		}
+	}
+	return 1;
+}
+
+bool ANS::operator>=(const ANS& b)
+{
+	if (dim != b.dim) {
+		printf("不同长度的向量不能比较大小\n");
+		return 0;
+	}
+	for (int i = 0; i < dim; i++)
+	{
+		if (ans[i] < b.ans[i]) {
+			return 0;
+		}
+	}
+	return 1;
+}
+bool ANS::operator<=(const ANS& b)
+{
+	if (dim != b.dim) {
+		printf("不同长度的向量不能比较大小\n");
+		return 0;
+	}
+	for (int i = 0; i < dim; i++)
+	{
+		if (ans[i] > b.ans[i]) {
+			return 0;
+		}
+	}
+	return 1;
+}
+
+bool ANS::operator!=(const ANS& b)
+{
+	if (dim != b.dim) {
+		printf("不同长度的向量不能比较大小\n");
+		return 1;
+	}
+	for (int i = 0; i < dim; i++)
+	{
+		if (fabsl(ans[i] > b.ans[i]) > 1e-12) {
+			return 1;
+		}
+	}
+	return 0;
+}
+
+ld& ANS::operator[](int index)
+{
+	return ans[index];
+}
+
+ANS abs(ANS a)
+{
+	ANS tmp(a.dim);
+	for (int i = 0; i < a.dim; i++)
+		tmp[i] = abs(a[i]);
+	return tmp;
+}
+
 
 ANS ANS::Numdot(ld k)
 {
@@ -114,7 +202,6 @@ OneDimensionSearch::OneDimensionSearch(int _dim) :a(_dim),b(_dim),x1(_dim),x2(_d
 void OneDimensionSearch::init(ANS& _a, ANS& _b,SearchFunc _target)
 {
 	a = _a; b = _b;
-
 	targetfunc = _target;
 }
 

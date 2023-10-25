@@ -9,7 +9,7 @@ public:
 	ANS(int _dim);
 	ANS(int _dim, std::vector<ld>&);
 	ANS(std::vector<ld>&);
-	ANS(ANS&);
+	ANS(const ANS&);
 	/// @brief 计算向量的线性倍数
 	/// @param k 倍数
 	/// @return 
@@ -18,6 +18,12 @@ public:
 	ANS& operator=(const ANS&);
 	ANS operator+(const ANS&);
 	ANS operator-(const ANS& b);
+	bool operator<(const ANS& b);
+	bool operator>(const ANS& b);
+	bool operator<=(const ANS& b);
+	bool operator>=(const ANS& b);
+	bool operator!=(const ANS& b);
+	ld& operator[](int index);
 	friend ld dis(ANS&, ANS&);
 	void print() const;
 	
@@ -32,7 +38,7 @@ typedef ld(*SearchFunc)(const ANS&);
 /// @param b 
 /// @return 距离
 ld dis(ANS& a, ANS& b);
-
+ANS abs(ANS a);
 
 
 
