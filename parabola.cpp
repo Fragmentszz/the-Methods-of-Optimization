@@ -1,10 +1,14 @@
 #include"parabola.h"
+#include"XlsxWriter.h"
 ANS ParabolaSearch_easy::findxb(ANS& x1,ANS& x0,ANS& x2)
 {
 	ANS res(1);
-	res.ans[0] = (
-		(fx2 * (x0.ans[0] * x0.ans[0] - x1.ans[0] * x1.ans[0]) + fx0 * (x1.ans[0] * x1.ans[0] - x2.ans[0] * x2.ans[0]) + fx1 * (x2.ans[0] * x2.ans[0] - x0.ans[0] * x0.ans[0])) / (fx2 * (x0.ans[0] - x1.ans[0]) + fx0 * (x1.ans[0] - x2.ans[0]) + fx1 * (x2.ans[0] - x0.ans[0]))
-	);
+	if (abs((fx2 * (x0.ans[0] * x0.ans[0] - x1.ans[0] * x1.ans[0]) + fx0 * (x1.ans[0] * x1.ans[0] - x2.ans[0] * x2.ans[0]) + fx1 * (x2.ans[0] * x2.ans[0] - x0.ans[0] * x0.ans[0]))) < INS)
+		res[0] = 0;
+	else
+		res[0] = 0.5*(
+			(fx2 * (x0.ans[0] * x0.ans[0] - x1.ans[0] * x1.ans[0]) + fx0 * (x1.ans[0] * x1.ans[0] - x2.ans[0] * x2.ans[0]) + fx1 * (x2.ans[0] * x2.ans[0] - x0.ans[0] * x0.ans[0])) / (fx2 * (x0.ans[0] - x1.ans[0]) + fx0 * (x1.ans[0] - x2.ans[0]) + fx1 * (x2.ans[0] - x0.ans[0]))
+		);
 	return res;
 }
 ParabolaSearch_easy::ParabolaSearch_easy(int _dim) :OneDimensionSearch(_dim),x0(_dim)
@@ -21,12 +25,15 @@ void ParabolaSearch_easy::init(ANS& _a, ANS& _b, SearchFunc _target,ld _eps, ANS
 }
 void ParabolaSearch_easy::search()
 {
+	XlsxWriter xl("./ans.xlsx", "ParabolaSearch_easy");
 	fx0 = targetfunc(x0), fx1 = targetfunc(x1), fx2 = targetfunc(x2);
 	ANS xb = findxb(x1, x0, x2); ld fxb = targetfunc(xb);
 	while (abs(fx1 - fx2) > eps)
 	{
 		xb = findxb(x1, x0, x2); ld fxb = targetfunc(xb);
-		printf("%.6Lf %.6Lf %.6Lf %.6Lf\n", x1, x0, x2, xb);
+		printf("%.6Lf %.6Lf %.6Lf %.6Lf\n", x1[0], x0[0], x2[0], xb[0]);
+		xl.writeAns(x1); xl.writeAns(x0); xl.writeAns(x2); xl.writeAns(xb);
+		xl.nextRow();
 		if (fx0 < fxb) {
 			if (x0 < xb) {
 				x2 = xb; fx2 = fxb;
@@ -47,7 +54,9 @@ void ParabolaSearch_easy::search()
 		}
 	}
 	ans = x0; fmin = fx0;
-	printf("%.6f", fmin); ans.print();
+	printf("fmin = %.6f x* = ", fmin); ans.print();
+	xl.nextRow();
+	xl.writeAns(ans); xl(xl.nown, 2) = (double)fmin;
 }
 
 
@@ -58,9 +67,12 @@ void ParabolaSearch_easy::search()
 ANS ParabolaSearch_hard::findxb(ANS& x1, ANS& x0, ANS& x2)
 {
 	ANS res(1);
-	res.ans[0] = (
-		(fx2 * (x0.ans[0] * x0.ans[0] - x1.ans[0] * x1.ans[0]) + fx0 * (x1.ans[0] * x1.ans[0] - x2.ans[0] * x2.ans[0]) + fx1 * (x2.ans[0] * x2.ans[0] - x0.ans[0] * x0.ans[0])) / (fx2 * (x0.ans[0] - x1.ans[0]) + fx0 * (x1.ans[0] - x2.ans[0]) + fx1 * (x2.ans[0] - x0.ans[0]))
-		);
+	if (abs((fx2 * (x0.ans[0] * x0.ans[0] - x1.ans[0] * x1.ans[0]) + fx0 * (x1.ans[0] * x1.ans[0] - x2.ans[0] * x2.ans[0]) + fx1 * (x2.ans[0] * x2.ans[0] - x0.ans[0] * x0.ans[0]))) < INS)
+		res[0] = 0;
+	else
+		res[0] = 0.5 * (
+			(fx2 * (x0.ans[0] * x0.ans[0] - x1.ans[0] * x1.ans[0]) + fx0 * (x1.ans[0] * x1.ans[0] - x2.ans[0] * x2.ans[0]) + fx1 * (x2.ans[0] * x2.ans[0] - x0.ans[0] * x0.ans[0])) / (fx2 * (x0.ans[0] - x1.ans[0]) + fx0 * (x1.ans[0] - x2.ans[0]) + fx1 * (x2.ans[0] - x0.ans[0]))
+			);
 	return res;
 }
 
@@ -80,7 +92,8 @@ void ParabolaSearch_hard::init(ANS& _a, ANS& _b, SearchFunc _target, ld _eps1, l
 
 void ParabolaSearch_hard::operatoion(ANS& xb, ld& fxb)
 {
-	if (abs(fx0 - fxb) < 1e-10) {
+	if (fabsl(fx0 - fxb) < INS) {
+		
 		if (x0 < xb) {
 			x1 = x0; fx1 = fx0;
 			x2 = xb; fx2 = fxb;
@@ -96,6 +109,7 @@ void ParabolaSearch_hard::operatoion(ANS& xb, ld& fxb)
 		}
 	}
 	else if (fx0 > fxb) {
+		
 		if (x0 < xb) {
 			x1 = x0; fx1 = fx0;
 			x0 = xb; fx0 = fxb;
@@ -117,6 +131,7 @@ void ParabolaSearch_hard::operatoion(ANS& xb, ld& fxb)
 
 void ParabolaSearch_hard::search()
 {
+	XlsxWriter xl("./ans.xlsx", "ParabolaSearch_hard");
 	fx0 = targetfunc(x0), fx1 = targetfunc(x1), fx2 = targetfunc(x2);
 	ANS xb = findxb(x1, x0, x2); ld fxb = targetfunc(xb);
 	std::vector<ld> le1 = { eps1 }, le2 = { eps2 };
@@ -127,6 +142,9 @@ void ParabolaSearch_hard::search()
 			break;
 		}
 		xb = findxb(x1, x0, x2); fxb = targetfunc(xb);
+		printf("%.6Lf %.6Lf %.6Lf %.6Lf\n", x1[0], x0[0], x2[0], xb[0]);
+		xl.writeAns(x1); xl.writeAns(x0); xl.writeAns(x2); xl.writeAns(xb);
+		xl.nextRow();
 		if (!(xb != x0))
 		{
 			xb = (x0 + x1).Numdot(0.5);
@@ -134,6 +152,9 @@ void ParabolaSearch_hard::search()
 		}
 		operatoion(xb, fxb);
 	}
+	printf("%.6Lf %.6Lf %.6Lf %.6Lf\n", x1[0], x0[0], x2[0], xb[0]);
 	ans = x0, fmin = fx0;
 	printf("fmin = %.6Lf  ", fmin); ans.print();
+	xl.nextRow();
+	xl.writeAns(ans); xl(xl.nown, 2) = (double)fmin;
 }

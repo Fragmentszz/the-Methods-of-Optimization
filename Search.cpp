@@ -95,7 +95,7 @@ bool ANS::operator>(const ANS& b)
 	}
 	for (int i = 0; i < dim; i++)
 	{
-		if (ans[i] <= b.ans[i]) {
+		if (ans[i] < b.ans[i] || fabsl(ans[i] - b.ans[i]) < INS ) {
 			return 0;
 		}
 	}
@@ -139,7 +139,7 @@ bool ANS::operator!=(const ANS& b)
 	}
 	for (int i = 0; i < dim; i++)
 	{
-		if (fabsl(ans[i] > b.ans[i]) > 1e-12) {
+		if (fabsl(ans[i] - b.ans[i]) > INS) {
 			return 1;
 		}
 	}
