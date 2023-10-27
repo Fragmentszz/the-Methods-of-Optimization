@@ -8,6 +8,16 @@ ANS::ANS(int _dim)
 	}
 }
 
+ld ANS::norm2()
+{
+	ld res = 0;
+	for (int i = 0; i < dim; i++) {
+		res += ans[i] * ans[i];
+	}
+	return sqrtl(res);
+}
+
+
 ANS::ANS(int _dim, std::vector<ld>& _ans)
 {
 	dim = _dim;
@@ -30,6 +40,19 @@ ANS& ANS::operator=(const std::vector<ld>& _ans)
 }
 ANS::ANS(std::vector<ld>& _ans) :ANS(_ans.size(), _ans)
 {}
+
+ld ANS::operator*(const ANS& b)
+{
+	ld res = 0;
+	if (b.dim != dim) {
+		printf("长度不一样的向量不能内积！\n");
+		return res;
+	}
+	for (int i = 0; i < dim; i++)
+	{
+		res += ans[i] * b.ans[i];
+	}
+}
 ANS::ANS(const ANS& _ans)
 {
 	ans.clear();
@@ -150,6 +173,11 @@ ld& ANS::operator[](int index)
 {
 	return ans[index];
 }
+ld ANS::operator[](int index) const
+{
+	return ans[index];
+}
+
 
 ANS abs(ANS a)
 {
