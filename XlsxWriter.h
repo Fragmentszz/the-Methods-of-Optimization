@@ -48,6 +48,7 @@ public:
 	//void operator()(int rindex, int cindex);
 	void writeAns(ANS& ans);
 	void writeRow(ANS& ans);
+	void write(ld x);
 	void nextRow();
 	~XlsxWriter();
 };

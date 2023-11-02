@@ -13,6 +13,10 @@ class WolfePowell
 	bool lowerBound();
 public:
 	WolfePowell(int _dim);
-	void init(ANS& _a, ANS& _b, SearchFunc _target, ld _alpha,ld _miu, ld _sigma);
+	void init(ANS& _a, ANS& _direction,ld _right, SearchFunc _target, ld _alpha,ld _miu, ld _sigma);
 	void search();
 };
+
+namespace WP {
+	void solve(SearchFunc);
+}
