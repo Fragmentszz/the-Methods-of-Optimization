@@ -24,6 +24,7 @@ public:
 	/// @param _target :搜索单目标函数
 	/// @ret void
 	virtual void init(ANS& _a, ANS& _b, SearchFunc _target);
+	virtual void reSet();
 	/// @brief 设置最大迭代次数
 	/// @param _maxit 最大迭代次数
 	virtual void setIteroation(int _maxit);
