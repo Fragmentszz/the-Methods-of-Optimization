@@ -4,7 +4,10 @@
 #include"XlsxWriter.h"
 #include"Wolfe-Powell.h"
 #include"parabola.h"
+#include"DerivativeMethod.h"
+#include"ConjugateGradient.h"
 using namespace std;
+vector<vector<ld>> Points;
 ld func1(ld x)
 {
 	return x * x - 2 * x + 1;
@@ -24,7 +27,6 @@ ld func_sk(ld x)
 
 int main()
 {
-	//std::vector<ld> left = { -1.0L}, right = { 0.0L }, mid = {-0.0L};
 	auto Func1 = [](const ANS& x) ->ld {
 		if (x.dim != 1)
 		{
@@ -33,14 +35,53 @@ int main()
 		}
 		return func2(x.ans[0]);
 	};
-	//auto Rosenbroke = [](const ANS& x) -> ld {
-	//	if (x.dim != 2)
-	//	{
-	//		printf("输入向量长度不为2!\n");
-	//		return 0;
-	//	}
-	//	return 100 * (x[1] - x[0] * x[0]) * (x[1] - x[0] * x[0]) + (1 - x[0]) * (1 - x[0]);
-	//};
+	Points.push_back({ 1,1 });
+	Points.push_back({ 3,4 });
+	//Points.push_back({ 7,2 });
+	//Points.push_back({ 6,3 });
+	auto Rosenbroke = [](const ANS& x) -> ld {
+		if (x.dim != 2)
+		{
+			printf("输入向量长度不为2!\n");
+			return 0;
+		}
+		return 100 * (x[1] - x[0] * x[0]) * (x[1] - x[0] * x[0]) + (1 - x[0]) * (1 - x[0]);
+	};
+
+	auto dis = [](const ANS& x) ->ld {
+		if (x.dim != 2)
+		{
+			printf("输入向量长度不为2!\n");
+			return 0;
+		}
+		ld res = 0;
+		for (int i = 0; i < Points.size(); i++)
+		{
+			res += (x[0] - Points[i][0]) * (x[0] - Points[i][0]) + (x[1] - Points[i][1]) * (x[1] - Points[i][1]);
+		}
+		return res;
+	};
+	auto dis2 = [](const ANS& x) ->ld {
+		if (x.dim != 2)
+		{
+			printf("输入向量长度不为2!\n");
+			return 0;
+		}
+		ld res = 0;
+		for (int i = 0; i < Points.size(); i++)
+		{
+			res += sqrtl((x[0] - Points[i][0]) * (x[0] - Points[i][0]) + (x[1] - Points[i][1]) * (x[1] - Points[i][1]));
+		}
+		return res;
+		};
+	auto p1 = [](const ANS& x) -> ld {
+		if (x.dim != 2)
+		{
+			printf("输入向量长度不为2!\n");
+			return 0;
+		}
+		return (x[0]-2) * (x[0] - 2) * (x[0] - 2) * (x[0] - 2) + (x[0] - 2) * (x[0] - 2) * x[1]*x[1] + (x[1] + 1) * (x[1] + 1);
+		};
 	//ANS a(1, left), b(1, right), c(1, mid);
 	////ParabolaSearch_easy gs(1);
 	////gs.init(a, b, Func1,1e-4,c);
@@ -48,9 +89,25 @@ int main()
 	////ParabolaSearch_hard gs2(1);
 	////gs2.init(a, b, Func1, 1e-4, 1e-30, c);
 	////gs2.search();
-	//GoldSearch gs(1);
-	//gs.init(a, b, Func1, 1e-4);
+	GoldSearch gs(1);
+	gs.init(0, 0, nullptr, 1e-4);
 	//gs.search();
-	WP::solve(Func1);
+	//WP::solve(Func1);
+	ANS x0(2);
+	x0[0] = -1, x0[1] = 1;
+	WolfePowell wp(2);
+	wp.init(x0, x0, INF, nullptr, 1, 0.3L, 0.4L);
+	DerivativeMethod dm(2, gs, x0, Rosenbroke, 1e-4);
+	DerivativeMethod dm2(2, wp, x0, Rosenbroke, 1e-4);
+	ConjugateGradient cg1(2, gs, x0,dis, 1e-10);
+	ConjugateGradient cg2(2, gs, x0, dis2, 1e-10);
+	//dm.search();
+	//dm2.search();
+	
+	cg1.search();
+	cg2.search();
+
+	cout << cg1.fmin << " "; cg1.ans.print();
+	cout << cg2.fmin << " "; cg2.ans.print();
 	return 0;
 }

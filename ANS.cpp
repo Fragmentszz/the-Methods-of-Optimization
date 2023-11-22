@@ -28,10 +28,8 @@ ANS::ANS(int _dim, std::vector<ld>& _ans)
 
 ANS& ANS::operator=(const std::vector<ld>& _ans)
 {
-	if (dim != _ans.size()) {
-		printf("操作失败，赋值向量和解向量大小不一致\n");
-		return *this;
-	}
+	dim = _ans.size();
+	ans.resize(dim);
 	for (int i = 0; i < dim; i++)
 	{
 		ans[i] = _ans[i];
@@ -91,6 +89,16 @@ ANS ANS::operator-(const ANS& b)
 	for (int i = 0; i < dim; i++)
 	{
 		tmp.ans[i] = ans[i] - b.ans[i];
+	}
+	return tmp;
+}
+
+ANS ANS::operator-()
+{
+	ANS tmp(dim);
+	for (int i = 0; i < dim; i++)
+	{
+		tmp.ans[i] = -ans[i];
 	}
 	return tmp;
 }

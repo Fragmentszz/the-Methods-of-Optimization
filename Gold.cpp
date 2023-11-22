@@ -2,40 +2,47 @@
 #include"XlsxWriter.h"
 const ld lamda1 = 0.5L * (3 - sqrtl(5.0L));
 const ld lamda2 = 0.5L * (sqrtl(5.0L) - 1);
-void GoldSearch::init(ANS& _a, ANS& _b, SearchFunc _target, ld eps)
+void GoldSearch::init(ld _a, ld _b, OneDimensionSearchFunc _target, ld _eps)
 {
-	OneDimensionSearch::init(_a, _b, _target);
+	eps = _eps;
+	a = _a;
+	b = _b;
+	targetfunc = _target;
+	//OneDimensionSearch::init(_a, _b, _target);
 	ld mi = lamda2;
-	ld d = dis(a, b);
+	ld d = b - a;
 	for (max_iteroation = 1; mi > eps / d; max_iteroation++)
 	{
 		mi *= lamda2;
 	}
-	printf("初始区间长d  = %.5Lf ,eps = %.5Lf ,max_iteration = %d,需要迭代 %d 轮\n", d, eps, max_iteroation, max_iteroation);
-	x1 = a + (b - a).Numdot(1.0L * lamda1), x2 = a + (b - a).Numdot(1.0L * lamda2);
+	//printf("初始区间长d  = %.5Lf ,eps = %.5Lf ,max_iteration = %d,需要迭代 %d 轮\n", d, eps, max_iteroation, max_iteroation);
+	x1 = a + (b - a) * 1.0L * lamda1, x2 = a + (b - a) * 1.0L * lamda2;
 }
 GoldSearch::GoldSearch(int _dim):OneDimensionSearch(_dim)
 {
-
-
+	
 }
+
+void GoldSearch::reSet(ANS _x0, ANS direction, SearchFunc _target)
+{
+	OneDimensionSearch::reSet(_x0, direction, _target);
+	init(a, b, targetfunc, eps);
+}
+
 void GoldSearch::search()
 {
-	XlsxWriter xl("./baogao/third/ans.xlsx", "GoldSearch");
-	xl.nextRow();
+#define targetfunc solver.solve
 	fx1 = targetfunc(x1), fx2 = targetfunc(x2);
-	ANS tmp(x2.dim);
+	ld tmp = 0;
 	for (now_iteration = 1; now_iteration <= max_iteroation; now_iteration++)
 	{
-		ANS tmp2(x2.dim);
+		ld tmp2 = 0;
 		tmp2 = x2 - x1;
-		if (tmp2.ans[0] < 1e-20) {																	//防止x1和x2由于误差原因相距过近，重新算一次x1和x2
-			x1 = a + (b - a).Numdot(1.0L * lamda1), x2 = a + (b - a).Numdot(1.0L * lamda2);
+		if (tmp2 < 1e-20) {																	//防止x1和x2由于误差原因相距过近，重新算一次x1和x2
+			x1 = a + (b - a) * 1.0L * lamda1, x2 = a + (b - a) * 1.0L * lamda2;
 			fx1 = targetfunc(x1), fx2 = targetfunc(x2);
 		}
-		//printf("%d %.6Lf %.6Lf %.6Lf %.6Lf %.6Lf %.6Lf\n", now_iteration, a.ans[0], b.ans[0],x1.ans[0],x2.ans[0], fx1, fx2);
-		xl.writeAns(a); xl.writeAns(b); xl.write(fx1); xl.write(fx2);
-		xl.nextRow();
+		//printf("%d %.6Lf %.6Lf %.6Lf %.6Lf %.6Lf %.6Lf\n", now_iteration, a.alpha[0], b.alpha[0],x1.alpha[0],x2.alpha[0], fx1, fx2);
 		if (fx1 < fx2) {
 			b = x2;
 			x2 = x1;
@@ -52,18 +59,15 @@ void GoldSearch::search()
 		}
 	}
 	if (fx1 < fx2) {									//最后根据
-		ans = (a + x2).Numdot(0.5);
+		alpha = (a + x2) * 0.5;
 	}
 	else if (fx1 == fx2) {
-		ans = (x1 + x2).Numdot(0.5);
+		alpha = (x1 + x2) * 0.5;
 	}
 	else {
-		ans = (x1 + b).Numdot(0.5);
+		alpha = (x1 + b) * 0.5;
 	}
-	xl.writeAns(a); xl.writeAns(b); xl.write(fx1); xl.write(fx2);
-	xl.nextRow();
-	fmin = targetfunc(ans);
-	printf("fmin = %.6Lf\n", fmin);
-	xl.write(fmin); xl.writeAns(ans);
-	xl.nextRow();
+	fmin = targetfunc(alpha);
 }
+
+

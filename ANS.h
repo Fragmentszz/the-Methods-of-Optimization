@@ -18,6 +18,7 @@ public:
 	ANS& operator=(const ANS&);
 	ANS operator+(const ANS&);
 	ANS operator-(const ANS& b);
+	ANS operator-();
 	ld norm2();
 	bool operator<(const ANS& b);
 	bool operator>(const ANS& b);
@@ -33,7 +34,7 @@ public:
 };
 
 typedef ld(*SearchFunc)(const ANS&);
-
+typedef ld(*OneDimensionSearchFunc)(ld);
 
 
 /// @brief 计算长度相同的向量的欧氏距离

@@ -4,8 +4,11 @@
 class GoldSearch
 	:public OneDimensionSearch
 {
+
+	ld eps;
 public:
 	GoldSearch(int _dim);
-	void search();
-	void init(ANS& _a, ANS& _b, SearchFunc _target, ld eps);
+	virtual void search();
+	void init(ld _a, ld _b, OneDimensionSearchFunc _target, ld eps);
+	virtual void reSet(ANS _x0, ANS direction, SearchFunc _target);
 };
