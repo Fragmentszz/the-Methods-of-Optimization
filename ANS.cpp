@@ -231,7 +231,7 @@ void ANS::print() const
 
 
 
-ANS derivative(SearchFunc target, ANS& x)
+ANS _derivative(SearchFunc target, ANS& x)
 {
 	ANS res(x.dim);
 	for (int i = 0; i < x.dim; i++)

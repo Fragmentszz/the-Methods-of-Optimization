@@ -29,7 +29,7 @@ void OneDimensionSearch::reSet(ANS _x0, ANS direction, SearchFunc _target)
 	auto cacu = [](ld _alpha) ->ld {
 		ANS nowans = X0 + nowDirection.Numdot(_alpha);
 		return tmpFunc(nowans);
-		};
+	};
 	targetfunc = cacu;
 	AREA area = SearchArea(targetfunc, 0, 0.1);
 	a = area[0], b = area[2];

@@ -49,4 +49,4 @@ ANS abs(ANS a);
 /// @param target 目标函数
 /// @param x 当前向量X
 /// @return 梯度
-ANS derivative(SearchFunc target, ANS& x);
+ANS _derivative(SearchFunc target, ANS& x);

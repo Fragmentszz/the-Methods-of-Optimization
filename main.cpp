@@ -99,15 +99,15 @@ int main()
 	wp.init(x0, x0, INF, nullptr, 1, 0.3L, 0.4L);
 	DerivativeMethod dm(2, gs, x0, Rosenbroke, 1e-4);
 	DerivativeMethod dm2(2, wp, x0, Rosenbroke, 1e-4);
-	ConjugateGradient cg1(2, gs, x0,dis, 1e-10);
-	ConjugateGradient cg2(2, gs, x0, dis2, 1e-10);
+	ConjugateGradient cg1(2, gs, x0, Rosenbroke, 1e-10);
+	ConjugateGradient cg2(2, wp, x0, Rosenbroke, 1e-10);
 	//dm.search();
 	//dm2.search();
 	
 	cg1.search();
-	cg2.search();
+	//cg2.search();
 
-	cout << cg1.fmin << " "; cg1.ans.print();
-	cout << cg2.fmin << " "; cg2.ans.print();
+	//cout << cg1.fmin << " "; cg1.ans.print();
+	//cout << cg2.fmin << " "; cg2.ans.print();
 	return 0;
 }

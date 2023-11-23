@@ -11,4 +11,6 @@ public:
 	Solver(int _dim);
 	ld solve(ld _alpha);
 	void set(ANS _x0, ANS _direction, SearchFunc _target);
+	ANS derivative(ANS tmp);
+	ANS derivative(ld _a);
 };

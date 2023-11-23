@@ -8,10 +8,12 @@ WolfePowell::WolfePowell(int _dim):fp0(_dim),direction(_dim),a(_dim),OneDimensio
 
 void WolfePowell::reSet(ANS _x0, ANS direction, SearchFunc _target)
 {
+	OneDimensionSearch::reSet(_x0, direction, _target);
 	init(_x0, direction, INF, _target, alpha, miu, sigma);
 }
 void WolfePowell::init(ANS& _a, ANS& _direction, ld _right, SearchFunc _target, ld _alpha, ld _miu, ld _sigma)
 {
+	
 	left = 0, right = _right;
 	direction = _direction;
 	ANS tmp = _a + direction.Numdot(right);
@@ -20,7 +22,7 @@ void WolfePowell::init(ANS& _a, ANS& _direction, ld _right, SearchFunc _target, 
 	alpha = _alpha;
 	if (targetfunc) {
 		f0 = targetfunc(a);
-		fp0 = derivative(targetfunc, a) * direction;
+		fp0 = solver.derivative(a) * direction;
 	}
 	miu = _miu, sigma = _sigma;
 }
@@ -28,7 +30,7 @@ void WolfePowell::init(ANS& _a, ANS& _direction, ld _right, SearchFunc _target, 
 bool WolfePowell::lowerBound()
 {
 	ANS tmp = (a + direction.Numdot(alpha));
-	ld fp1 = derivative(targetfunc, tmp) * direction;
+	ld fp1 = solver.derivative(tmp) * direction;
 	using namespace std;
 	//cout << alpha << " " << fp0 << " " << fp1 << endl;
 	if (fp1 >= fp0 * sigma)	return 1;
@@ -55,7 +57,7 @@ void WolfePowell::search()
 	{
 		ANS tmp = (a + direction.Numdot(alpha));
 		ld f1 = targetfunc(tmp);
-		ld fp1 = derivative(targetfunc, tmp) * direction;
+		ld fp1 = solver.derivative(tmp) * direction;
 		//xl.nextRow();
 		//xl.write(alpha); xl.writeAns(tmp); xl.write(f1); xl.write(fp1);
 		if (!upperBound()) {						//еп╤ой╫1

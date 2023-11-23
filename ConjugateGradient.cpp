@@ -11,13 +11,13 @@ void ConjugateGradient::getDirection()
 {
 	if (nowDirection.dim == 0)
 	{
-		nowDerivative = derivative(targetfunc, x0);
+		nowDerivative = _derivative(targetfunc, x0);
 		nowDirection = -nowDerivative;
 		return;
 	}
 	preDirection = nowDirection;
 	ANS preDerivative = nowDerivative;
-	nowDerivative = derivative(targetfunc, x0);
+	nowDerivative = _derivative(targetfunc, x0);
 	ld tmp = (nowDerivative * nowDerivative) / (preDerivative * preDerivative);
 	nowDirection = -nowDerivative + preDirection.Numdot(tmp);
 }
