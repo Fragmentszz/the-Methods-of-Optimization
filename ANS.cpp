@@ -242,3 +242,53 @@ ANS _derivative(SearchFunc target, ANS& x)
 	}
 	return res;
 }
+
+
+MLDD _Hessian(SearchFunc target, ANS& x)
+{
+	MLDD m;
+	m.resize(x.dim, x.dim);
+	ANS tmp(x.dim);
+	for (int i = 0; i < x.dim; i++)
+	{
+		ANS tmp1(x), tmp2(x);
+		tmp1[i] = x[i] + delta;
+		tmp2[i] = x[i] + delta;
+		for (int j = 0; j < i; j++)
+		{
+			tmp1[j] = x[j] + delta;
+			ANS tmp3(x), tmp4(x);
+			tmp3[j] = x[j] + delta;
+			m(i, j) = (target(tmp1) - target(tmp2) - target(tmp3) + target(tmp4)) / delta / delta;
+			tmp1[j] = x[j];
+		}
+		tmp2[i] = x[i] - delta;
+		m(i, i) = (target(tmp1) + target(tmp2) - 2 * target(x)) / delta / delta;
+		tmp2[i] = x[i] + delta;
+		for (int j = i + 1; j < x.dim; j++)
+		{
+			tmp1[j] = x[j] + delta;
+			ANS tmp3(x), tmp4(x);
+			tmp3[j] = x[j] + delta;
+			m(i, j) = (target(tmp1) - target(tmp2) - target(tmp3) + target(tmp4)) / delta / delta;
+			tmp1[j] = x[j];
+		}
+	}
+	return m;
+}
+
+
+ANS operator* (const ANS& x,const MLDD& m)
+{
+	if (m.cols() != x.dim) {
+		printf("相乘时矩阵列和向量行大小不一致");
+		return ANS(x.dim);
+	}
+	Eigen::Vector<ld, Eigen::Dynamic> v,ans;
+	v.resize(x.dim);
+	for (int i = 0; i < x.dim; i++)	v[i] = x[i];
+	ANS res(x.dim);
+	ans = m * v;
+	for (int i = 0; i < x.dim; i++)	res[i] = ans[i];
+	return res;
+}

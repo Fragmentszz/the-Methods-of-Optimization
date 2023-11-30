@@ -33,7 +33,10 @@ public:
 
 	//void operator=(_T value);
 };
-
+namespace Wmode{
+	const int Append = 1;
+	const int Cover = 2;
+}
 class XlsxWriter
 {
 private:
@@ -43,7 +46,7 @@ private:
 	int n, m;
 public:
 	int nown, nowm;
-	XlsxWriter(std::string filepath, std::string sheetname);
+	XlsxWriter(std::string filepath, std::string sheetname,int flag);
 	MyCell operator()(int rindex, int cindex);
 	//void operator()(int rindex, int cindex);
 	void writeAns(ANS& ans);

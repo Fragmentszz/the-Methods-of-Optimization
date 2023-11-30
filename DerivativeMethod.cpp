@@ -26,14 +26,13 @@ void DerivativeMethod::getDirection()
 
 void DerivativeMethod::search()
 {
-	XlsxWriter writer("./baogao/DerivativeMethods.xlsx", "Rosenbroke_cg_1");
+	XlsxWriter writer("./baogao/DerivativeMethods.xlsx", "Newton",Wmode::Cover);
 	getDirection();
 	int cnt = 0;
 	while (nowDerivative.norm2() > eps)
 	{
 		cnt++;
 		fmin = targetfunc(x0);
-		
 		printf("fmin = %.6Lf  ", fmin);
 		x0.print();
 		writer.writeAns(x0);

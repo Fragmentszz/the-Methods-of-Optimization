@@ -7,6 +7,7 @@ ConjugateGradient::ConjugateGradient(int _dim, OneDimensionSearch& _Search, ANS 
 {
 	eps = _eps;
 }
+
 void ConjugateGradient::getDirection()
 {
 	if (nowDirection.dim == 0)

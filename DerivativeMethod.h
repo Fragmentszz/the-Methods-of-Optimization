@@ -11,7 +11,7 @@ protected:
 	ld eps;
 	virtual void getDirection();
 	void getNewFunc();
-	ANS x0;							
+	ANS x0;
 	ANS nowDerivative;				//当前导数
 	ANS nowDirection;
 

@@ -50,3 +50,12 @@ ANS abs(ANS a);
 /// @param x 当前向量X
 /// @return 梯度
 ANS _derivative(SearchFunc target, ANS& x);
+
+/// @brief 求Hessian阵
+/// @param target 目标函数
+/// @param x 当前向量X
+/// @return 二阶梯度阵
+MLDD _Hessian(SearchFunc target, ANS& x);
+
+
+ANS operator* (const ANS& x, const MLDD& m);
