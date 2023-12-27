@@ -59,3 +59,5 @@ MLDD _Hessian(SearchFunc target, ANS& x);
 
 
 ANS operator* (const ANS& x, const MLDD& m);
+
+MLDD operator*(ld bs, const MLDD& m);

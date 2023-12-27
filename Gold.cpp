@@ -31,7 +31,6 @@ void GoldSearch::reSet(ANS _x0, ANS direction, SearchFunc _target)
 
 void GoldSearch::search()
 {
-#define targetfunc solver.solve
 	fx1 = targetfunc(x1), fx2 = targetfunc(x2);
 	ld tmp = 0;
 	for (now_iteration = 1; now_iteration <= max_iteroation; now_iteration++)

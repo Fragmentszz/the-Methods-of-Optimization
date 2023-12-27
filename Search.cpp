@@ -19,7 +19,6 @@ void OneDimensionSearch::setIteroation(int _maxit)
 	max_iteroation = _maxit;
 }
 
-
 void OneDimensionSearch::reSet(ANS _x0, ANS direction, SearchFunc _target)
 {
 	tmpFunc = _target;
@@ -31,8 +30,8 @@ void OneDimensionSearch::reSet(ANS _x0, ANS direction, SearchFunc _target)
 		return tmpFunc(nowans);
 	};
 	targetfunc = cacu;
-	AREA area = SearchArea(targetfunc, 0, 0.1);
-	a = area[0], b = area[2];
+	a = 0, b = 100;
+	
 }
 
 ld OneDimensionSearch::getAlpha()

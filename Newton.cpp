@@ -1,13 +1,29 @@
 #include"Newton.h"
 
-
-
 void Newton::getDirection()
 {
+	auto Rosenbrock_de = [](const ANS& x)->ANS {
+		ld sum = 0;
+		//if (x.dim != 10) {
+		//	cout << "Î¬Êý²»Îª10!" << endl;
+		//	return 0;
+		//}
+		ANS res(x.dim);
+		for (int i = 0; i < x.dim - 1; i++)
+		{
+			sum += 100 * (x[i + 1] - x[i] * x[i]) * (x[i + 1] - x[i] * x[i]) + (1 - x[i]) * (1 - x[i]);
+			res[i + 1] += 200 * (x[i + 1] - x[i] * x[i]);
+			res[i] += -200 * x[i] * 2 * (x[i + 1] - x[i] * x[i]) + 2 * (x[i] - 1);
+		}
+		return res;
+		};
 	nowDerivative = _derivative(targetfunc, x0);
+	//nowDerivative.print();
 	MLDD tmp = _Hessian(targetfunc, x0);
 	Giv = tmp.inverse();
-	//nowDirection = Giv * -nowDerivative;
+	using namespace std;
+	ANS tmp2 = -nowDerivative;
+	nowDirection = tmp2 * Giv;
 }
 
 Newton::Newton(int _dim, OneDimensionSearch& _Search, ANS _x0, SearchFunc _target, ld _eps,MLDD Giv0)

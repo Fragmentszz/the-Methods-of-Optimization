@@ -286,9 +286,23 @@ ANS operator* (const ANS& x,const MLDD& m)
 	}
 	Eigen::Vector<ld, Eigen::Dynamic> v,ans;
 	v.resize(x.dim);
-	for (int i = 0; i < x.dim; i++)	v[i] = x[i];
+	for (int i = 0; i < x.dim; i++)	v(i) = x[i];
 	ANS res(x.dim);
 	ans = m * v;
-	for (int i = 0; i < x.dim; i++)	res[i] = ans[i];
+	for (int i = 0; i < x.dim; i++)	res[i] = ans(i);
 	return res;
+}
+
+MLDD operator*(ld bs, const MLDD& m)
+{
+	MLDD tmp;
+	tmp.resize(m.rows(), m.cols());
+	for (int i = 0; i < m.rows(); i++)
+	{
+		for (int j = 0; j < m.cols(); j++)
+		{
+			tmp(i, j) = m(i, j) * bs;
+		}
+	}
+	return tmp;
 }

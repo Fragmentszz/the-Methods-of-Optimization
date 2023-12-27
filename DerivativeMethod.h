@@ -10,7 +10,7 @@ protected:
 	OneDimensionSearch& Search;
 	ld eps;
 	virtual void getDirection();
-	void getNewFunc();
+	virtual void getNewFunc();
 	ANS x0;
 	ANS nowDerivative;				//当前导数
 	ANS nowDirection;
